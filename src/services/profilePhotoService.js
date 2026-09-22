@@ -60,21 +60,6 @@ export async function uploadProfilePhoto(uid, base64Data) {
     throw error;
   }
 
-  // The vendor's profile photo is also the store's profile photo (single
-  // upload system). Best-effort sync: the store may not exist yet if the
-  // vendor uploads before their store is created.
-  try {
-    await updateDoc(doc(db, 'stores', uid), {
-      profilePhoto: path,
-    });
-    console.info('[profilePhoto] Synced store photo', { storeId: uid, path });
-  } catch (error) {
-    console.warn('[profilePhoto] Store photo sync skipped (store may not exist)', {
-      storeId: uid,
-      message: error?.message,
-    });
-  }
-
   return path;
 }
 
@@ -96,19 +81,6 @@ export async function removeProfilePhoto(uid) {
   await updateDoc(doc(db, 'users', uid), {
     profilePhoto: null,
   });
-
-  // Best-effort sync with the store photo.
-  try {
-    await updateDoc(doc(db, 'stores', uid), {
-      profilePhoto: null,
-    });
-    console.info('[profilePhoto] Cleared store photo', { storeId: uid });
-  } catch (error) {
-    console.warn('[profilePhoto] Store photo clear skipped (store may not exist)', {
-      storeId: uid,
-      message: error?.message,
-    });
-  }
 }
 
 export function getProfilePhotoUrl(path) {

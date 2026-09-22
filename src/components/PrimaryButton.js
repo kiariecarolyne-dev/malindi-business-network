@@ -13,15 +13,18 @@ export default function PrimaryButton({
 }) {
   const isPrimary = variant === 'primary';
   const isOutline = variant === 'outline';
+  const isNavy = variant === 'navy';
   const isDanger = variant === 'danger';
 
-  const backgroundColor = isPrimary
-    ? colors.primary
-    : isDanger
-      ? colors.danger
-      : 'transparent';
+  const backgroundColor = isNavy
+    ? colors.navy
+    : isPrimary
+      ? colors.primary
+      : isDanger
+        ? colors.danger
+        : 'transparent';
 
-  const borderColor = isOutline ? colors.primary : colors.border;
+  const borderColor = isOutline ? colors.primary : isNavy ? colors.navy : colors.border;
 
   const textColor = isOutline ? colors.primary : colors.white;
 

@@ -4,27 +4,23 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import BrandHeader from '../../components/BrandHeader';
 import { colors, radius, shadow, spacing, typography } from '../../utils/theme';
 
-const roles = [
+// Account setup choices for new users. Two paths: a free Network member who
+// browses and contacts businesses, or a business owner who pays KSh 100/month
+// to advertise on the Business Stage.
+const options = [
   {
-    key: 'buyer',
-    title: 'I am a Buyer',
-    subtitle: 'Browse stores and order fresh market products.',
-    icon: 'cart-outline',
-    navigate: 'BuyerRegister',
+    key: 'member',
+    title: 'Join the Network',
+    subtitle: 'Free access to discover Malindi businesses and contact them directly.',
+    icon: 'account-heart-outline',
+    navigate: 'MemberRegister',
   },
   {
-    key: 'vendor',
-    title: 'I am a Vendor',
-    subtitle: 'Open a store and sell your produce to buyers.',
+    key: 'business',
+    title: 'Register Your Business',
+    subtitle: 'KSh 100/month to advertise and promote your business on Malindi Business Network.',
     icon: 'storefront-outline',
-    navigate: 'VendorRegister',
-  },
-  {
-    key: 'delivery',
-    title: 'I am a Delivery Person',
-    subtitle: 'Deliver orders and earn per trip.',
-    icon: 'motorbike',
-    navigate: 'DeliveryRegister',
+    navigate: 'BusinessRegister',
   },
 ];
 
@@ -38,24 +34,25 @@ export default function RegisterRoleScreen({ navigation }) {
       </View>
 
       <View style={styles.list}>
-        {roles.map((role) => (
+        {options.map((option) => (
           <TouchableOpacity
-            key={role.key}
+            key={option.key}
             activeOpacity={0.85}
             style={styles.card}
-            onPress={() => navigation.navigate(role.navigate)}
+            onPress={() => navigation.navigate(option.navigate)}
           >
             <View style={styles.iconWrap}>
-              <MaterialCommunityIcons name={role.icon} size={26} color={colors.primary} />
+              <MaterialCommunityIcons name={option.icon} size={26} color={colors.primary} />
             </View>
             <View style={styles.cardBody}>
-              <Text style={styles.cardTitle}>{role.title}</Text>
-              <Text style={styles.cardSubtitle}>{role.subtitle}</Text>
+              <Text style={styles.cardTitle}>{option.title}</Text>
+              <Text style={styles.cardSubtitle}>{option.subtitle}</Text>
             </View>
             <MaterialCommunityIcons name="chevron-right" size={20} color={colors.textMuted} />
           </TouchableOpacity>
         ))}
       </View>
+
     </SafeAreaView>
   );
 }
@@ -76,6 +73,7 @@ const styles = StyleSheet.create({
   subtitle: {
     ...typography.bodySmall,
     marginTop: 4,
+    textAlign: 'center',
   },
   list: {
     paddingHorizontal: spacing.lg,

@@ -5,19 +5,20 @@
 // DEVELOPMENT TEST MODE IS ON. Do not add competing test flags elsewhere.
 //
 // What TEST_MODE does:
-//   - Lets a vendor manage their store (add/edit/remove products) without an
-//     active subscription, so the complete Buyer -> Vendor -> Delivery
-//     workflow can be exercised during development/testing.
+//   - Lets a business create advertisements without an active subscription, so
+//     the complete Member -> Business advertising workflow can be exercised
+//     during development/testing.
 //
 // What TEST_MODE does NOT do:
 //   - It NEVER writes fake subscription data to Firestore.
 //   - It NEVER overwrites `subscriptionStatus`, `subscriptionStartDate`,
 //     `subscriptionExpiryDate`, `premiumPlan`, `premiumUntil` or `isPremium`.
-//   - It NEVER hardcodes every vendor as subscribed.
-//   - It NEVER bypasses M-PESA / international payment processing. Vendor
-//     subscription payments always run through the real Daraja STK Push flow
-//     via the Malindi Business Network backend (/api/payments/mpesa/stkpush), and subscription
-//     activation is performed ONLY by the backend after a verified callback.
+//   - It NEVER hardcodes every business as subscribed.
+//   - It NEVER bypasses M-PESA / international payment processing. Business
+//     membership payments always run through the real Daraja STK Push flow via
+//     the Malindi Business Network backend (/api/payments/mpesa/stkpush), and
+//     subscription activation is performed ONLY by the backend after a
+//     verified callback.
 //   - The underlying real subscription checks stay intact and are the ONLY
 //     ones used when TEST_MODE is disabled.
 //
@@ -34,20 +35,6 @@ const TEST_MODE_ACTIVE = false;
 export const TEST_MODE =
   (typeof __DEV__ === 'boolean' && __DEV__) && TEST_MODE_ACTIVE;
 
-import {
-  buildTestOrderFromCart,
-  submitTestOrder,
-  updateOrderRecord,
-  addTestDeliveryRequest,
-  setActiveDeliveryFromOrder,
-  addDeliveryHistoryRecord,
-  getOrderByOrderNumber,
-  getBuyerOrderById,
-  getVendorOrderById,
-  activeDelivery,
-  deliveryRequests,
-} from '../services/mockData';
-
 // Milliseconds for a subscription deadline that may be a Firestore Timestamp,
 // a Date, an ISO string or a number; null when not parseable.
 function deadlineMs(value) {
@@ -61,7 +48,7 @@ function deadlineMs(value) {
   return Number.isFinite(ms) ? ms : null;
 }
 
-// The vendor subscription deadline(s) on a profile:
+// The subscription deadline(s) on a profile:
 //   - subscriptionExpiresAt is the canonical production field when present.
 //   - subscriptionExpiryDate is the legacy field written by the existing
 //     Daraja backend callback / dev test endpoints.
@@ -76,10 +63,10 @@ export function subscriptionExpiryMs(profile) {
   return Math.max(expiresAt, expiryDate);
 }
 
-// True when the vendor's Firestore profile shows an active subscription.
-// The Firestore profile is the source of truth; this helper is intentionally
-// not altered by TEST_MODE.
-export function isVendorSubscribed(profile) {
+// True when the profile shows an active KSh 100/month membership. The
+// Firestore profile is the source of truth; this helper is intentionally not
+// altered by TEST_MODE.
+export function isSubscribed(profile) {
   if (!profile || profile.subscriptionStatus !== 'active') {
     return false;
   }
@@ -90,169 +77,18 @@ export function isVendorSubscribed(profile) {
   return true;
 }
 
-// Whether a vendor may perform subscription-protected store actions
-// (add/edit/remove store products).
-//
-// Production rule: only vendors with an active subscription (isVendorSubscribed).
-// Development rule: TEST_MODE grants the same access for testing WITHOUT
-// touching Firestore subscription data.
-export function vendorCanManageStore(profile) {
+// True when the business owner's profile shows an active subscription.
+export function isBusinessSubscribed(profile) {
+  return isSubscribed(profile);
+}
+
+// Whether a business may perform subscription-protected actions (create
+// advertisements). Production rule: only businesses with an active
+// subscription. TEST_MODE grants access for development without touching
+// Firestore subscription data.
+export function businessCanAdvertise(profile) {
   if (TEST_MODE) {
     return true;
   }
-  return isVendorSubscribed(profile);
-}
-
-// ---- TEST_MODE order & delivery workflow helpers ----
-// Every helper below is a no-op (returns null) unless TEST_MODE is active, so a
-// production / release build (or TEST_MODE_ACTIVE = false) never creates fake
-// orders or fake delivery activity. There are deliberately NO test-payment
-// helpers here: payment reporting/verification always runs through the real
-// production services so no mock payment path can ever exist.
-
-// Creates a test order from the current cart and makes it visible to BOTH the
-// buyer and vendor order lists. Returns the new order (or null when TEST_MODE).
-export function placeTestOrder(input) {
-  if (!TEST_MODE) return null;
-  const order = buildTestOrderFromCart(input);
-  return submitTestOrder(order);
-}
-
-// Applies status updates to an order shared by the buyer and vendor lists.
-export function updateVendorOrderStatus(orderId, updates) {
-  if (!TEST_MODE) return null;
-  return updateOrderRecord(orderId, updates);
-}
-
-// Assigns a delivery person to an order, moves it to 'Out for Delivery' and
-// creates an incoming delivery request for the rider.
-export function assignTestDeliveryPerson(orderId, person) {
-  if (!TEST_MODE) return null;
-  const order = updateOrderRecord(orderId, {
-    status: 'Out for Delivery',
-    deliveryStatus: 'With Rider',
-    assignedDeliveryPerson: person ? person.fullName : 'Unassigned',
-    assignedDelivery: person
-      ? {
-          uid: person.uid ?? null,
-          id: person.id ?? null,
-          fullName: person.fullName,
-          phone: person.phone ?? null,
-          vehicleType: person.vehicleType ?? null,
-          plateNumber: person.plateNumber ?? null,
-          profilePhoto: person.profilePhoto ?? null,
-          availability: person.availability ?? null,
-        }
-      : null,
-  });
-  if (!order) {
-    return null;
-  }
-  addTestDeliveryRequest(order);
-  return order;
-}
-
-// Accepts a vendor's delivery request: starts the active delivery for the
-// rider and keeps the order's delivery status in sync.
-export function acceptTestDeliveryRequest(requestId) {
-  if (!TEST_MODE) return null;
-  const index = deliveryRequests.findIndex((request) => request.id === requestId);
-  if (index < 0) {
-    return null;
-  }
-  const request = deliveryRequests[index];
-  const order = getOrderByOrderNumber(request.orderNumber);
-  if (!order) {
-    return null;
-  }
-  deliveryRequests.splice(index, 1);
-  updateOrderRecord(order.id, {
-    deliveryStatus: 'Out for Delivery',
-    deliveryAccepted: true,
-  });
-  setActiveDeliveryFromOrder(order);
-  return order;
-}
-
-// Cancels a test order. Mirrors the real cancelOrder rules: only orders still
-// 'New' may be cancelled and only the permitted fields are updated.
-export function cancelOrderTest(orderId, reason) {
-  if (!TEST_MODE) return null;
-  const order = getBuyerOrderById(orderId) || getVendorOrderById(orderId);
-  if (!order) return null;
-  if (order.status !== 'New') return null;
-  Object.assign(order, {
-    status: 'Cancelled',
-    deliveryStatus: 'Cancelled',
-    cancelReason:
-      typeof reason === 'string' && reason.trim() ? reason.trim() : null,
-    cancelledAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
-  return order;
-}
-
-// Applies buyer order edits to a test order. Only 'New' orders may be edited
-// and only the buyer-side snapshot fields change.
-export function editOrderTest(orderId, updates) {
-  if (!TEST_MODE) return null;
-  const order = getBuyerOrderById(orderId) || getVendorOrderById(orderId);
-  if (!order) return null;
-  if (order.status !== 'New') return null;
-  const clean = {};
-  for (const key of ['items', 'subtotal', 'packaging', 'packagingFee', 'total']) {
-    if (updates && key in updates) {
-      clean[key] = updates[key];
-    }
-  }
-  Object.assign(order, clean, {
-    editedAt: new Date().toISOString(),
-    editCount: (order.editCount || 0) + 1,
-    updatedAt: new Date().toISOString(),
-  });
-  return order;
-}
-
-// Buyer reports a direct M-PESA payment to a test order.
-// NOTE: there is intentionally NO test variant. The real reportPayment in
-// orderService is the only path that records buyer-to-vendor M-PESA payment
-// reports, matching production behaviour even during development testing.
-
-// Vendor manually verifies a test order's payment report and starts preparing.
-// NOTE: there is intentionally NO test variant. Real payment verification runs
-// through verifyVendorPayment in orderService only.
-
-// Vendor rejects a test order's payment report and cancels the order.
-// NOTE: there is intentionally NO test variant. Real payment rejection runs
-// through rejectVendorPayment in orderService only.
-
-// Marks a test delivery completed: updates the order to Completed/Delivered
-// for buyer + vendor, records it in delivery history and clears the active
-// delivery.
-export function completeTestDelivery(orderNumber) {
-  if (!TEST_MODE) return null;
-  const order = getOrderByOrderNumber(orderNumber);
-  if (order) {
-    updateOrderRecord(order.id, { status: 'Completed', deliveryStatus: 'Delivered' });
-    addDeliveryHistoryRecord(order);
-  }
-  Object.assign(activeDelivery, {
-    orderNumber: '',
-    vendorStore: '',
-    pickupLocation: '',
-    deliveryLocation: '',
-    buyerPhone: '',
-    parcelStatus: 'Pending Pickup',
-    items: [],
-    packaging: null,
-    packagingFee: 0,
-    subtotal: 0,
-    total: 0,
-    deliveryStatus: '',
-    deliveryAccepted: false,
-    assignedDelivery: null,
-    vendor: null,
-    buyer: null,
-  });
-  return order;
+  return isBusinessSubscribed(profile);
 }

@@ -10,7 +10,7 @@
 // exclusively server-side; clients can never trigger a push for another user.
 //
 // Deployment prerequisites (documented in the project README):
-//   firebase use sokohapa-20744
+//   firebase use malindi-business-network
 //   firebase functions:secrets:set EXPO_ACCESS_TOKEN   (Expo account access token)
 //   firebase deploy --only functions
 //

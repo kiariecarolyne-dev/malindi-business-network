@@ -4,7 +4,6 @@
     "slug": "malindi-business-network",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/sokohapa-logo.png",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true,
@@ -14,7 +13,7 @@
       "package": "com.malindibusinessnetwork.app",
       "versionCode": 1,
       "adaptiveIcon": {
-        "backgroundColor": "#F1F6EF",
+        "backgroundColor": "#F8FAFC",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
@@ -27,10 +26,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#F1F6EF",
-          "image": "./assets/sokohapa-logo.png",
-          "imageWidth": 220,
-          "resizeMode": "contain"
+          "backgroundColor": "#F8FAFC"
         }
       ],
       [

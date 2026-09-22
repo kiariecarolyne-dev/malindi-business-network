@@ -44,8 +44,9 @@ const DEVICE_ID_STORAGE_KEY = 'malindiBusinessNetwork:notificationDeviceId';
 let configurePromise = null;
 
 // Idempotent one-time configuration: creates the Android notification channel
-// used for order updates. Returns true once configuration succeeded, and false
-// (without touching the native module) inside Expo Go.
+// used for Malindi Business Network notifications. Returns true once
+// configuration succeeded, and false (without touching the native module)
+// inside Expo Go.
 function ensureConfigured() {
   if (IS_EXPO_GO) {
     return Promise.resolve(false);
@@ -54,7 +55,7 @@ function ensureConfigured() {
     configurePromise = (async () => {
       if (Platform.OS === 'android') {
         await Notifications.setNotificationChannelAsync('default', {
-          name: 'Order updates',
+          name: 'Malindi Business Network',
           importance: Notifications.AndroidImportance.HIGH,
           lightColor: '#16A34A',
           vibrationPattern: [0, 250, 250, 250],

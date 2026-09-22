@@ -6,8 +6,11 @@ import TextField from '../../components/TextField';
 import PrimaryButton from '../../components/PrimaryButton';
 import { useAuth } from '../../context/AuthContext';
 import { getAuthErrorMessage } from '../../utils/firebaseErrors';
-import { colors, spacing, typography } from '../../utils/theme';
+import { colors, radius, shadow, spacing, typography } from '../../utils/theme';
 
+// Existing network members sign in here. The screen shares the Malindi
+// Business Network visual identity (navy / electric blue) with the Welcome
+// screen and keeps the same auth behaviour (login + password reset).
 export default function LoginScreen({ navigation }) {
   const { login, resetPassword } = useAuth();
   const [email, setEmail] = useState('');
@@ -57,12 +60,17 @@ export default function LoginScreen({ navigation }) {
           contentContainerStyle={styles.scroll}
           keyboardShouldPersistTaps="handled"
         >
-          <BrandHeader size="medium" />
+          <View style={styles.header}>
+            <BrandHeader size="medium" tagline={false} />
+          </View>
 
-          <Text style={styles.welcome}>Welcome back</Text>
-          <Text style={styles.hint}>Log in to continue shopping on Malindi Business Network.</Text>
+          <Text style={styles.welcome}>Welcome Back</Text>
+          <Text style={styles.hint}>
+            Sign in to continue building your network on Malindi Business
+            Network.
+          </Text>
 
-          <View style={styles.form}>
+          <View style={styles.formCard}>
             <TextField
               label="Email"
               value={email}
@@ -81,20 +89,20 @@ export default function LoginScreen({ navigation }) {
             />
 
             <PrimaryButton
-              title="Login"
+              title="Log In"
               onPress={handleLogin}
               disabled={submitting}
             />
 
             <TouchableOpacity onPress={handleForgotPassword} style={styles.forgotWrap}>
-              <Text style={styles.forgot}>Forgot Password</Text>
+              <Text style={styles.forgot}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.footer}>
-            <Text style={styles.footerText}>Don’t have an account?</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('RegisterRole')}>
-              <Text style={styles.footerLink}>Create Account</Text>
+            <Text style={styles.footerText}>New to Malindi Business Network?</Text>
+            <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('RegisterRole')}>
+              <Text style={styles.footerLink}>Join the Network</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -113,18 +121,32 @@ const styles = StyleSheet.create({
   },
   scroll: {
     padding: spacing.lg,
-    paddingTop: spacing.xl,
+    paddingBottom: spacing.xl,
+  },
+  header: {
+    alignItems: 'center',
   },
   welcome: {
     ...typography.title,
-    marginTop: spacing.xl,
+    fontSize: 28,
+    textAlign: 'center',
+    marginTop: spacing.lg,
   },
   hint: {
-    ...typography.bodySmall,
-    marginTop: 4,
+    ...typography.body,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    lineHeight: 20,
+    maxWidth: 300,
+    alignSelf: 'center',
+    marginTop: spacing.xs,
   },
-  form: {
+  formCard: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.xl,
+    padding: spacing.lg,
     marginTop: spacing.lg,
+    ...shadow,
   },
   forgotWrap: {
     alignSelf: 'center',
@@ -133,18 +155,21 @@ const styles = StyleSheet.create({
   forgot: {
     color: colors.primary,
     fontWeight: '600',
+    fontSize: 13,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     marginTop: spacing.xl,
   },
   footerText: {
-    color: colors.textSecondary,
+    ...typography.bodySmall,
+    color: colors.textMuted,
   },
   footerLink: {
     color: colors.primary,
     fontWeight: '700',
-    marginLeft: 4,
+    marginLeft: spacing.xs,
   },
 });

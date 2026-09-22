@@ -1,27 +1,7 @@
-// Composes a vendor's structured location (vendorLocation: {area, town,
-// county}) into a single "Area, Town, County" line. Falls back to the legacy
-// free-text `location` field when the structured map is missing or empty.
-// Returns null when no usable location is present.
-export function formatVendorLocation(source) {
-  const loc = source?.vendorLocation;
-  if (loc && typeof loc === 'object') {
-    const parts = [loc.area, loc.town, loc.county].filter(
-      (part) => part && String(part).trim().length > 0
-    );
-    if (parts.length > 0) return parts.join(', ');
-  }
-  const legacy = source?.location;
-  return legacy && String(legacy).trim().length > 0 ? String(legacy) : null;
-}
-
 export function formatKES(amount) {
   const rounded = Math.round(amount || 0);
   const formatted = rounded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return `KES ${formatted}`;
-}
-
-export function formatQuantity(kg) {
-  return `${kg} kg`;
 }
 
 // Normalizes a Kenyan phone/M-PESA number to an E.164 (2547XXXXXXXX) form, or
@@ -48,6 +28,44 @@ export function normalizeKenyanPhoneDisplay(raw) {
   return `0${nationalDigits}`;
 }
 
+// Human-friendly relative time ("Just now", "5m ago", "3h ago", "Yesterday",
+// "12 Sep") used on advertisement cards and the Business Stage feed.
+export function formatRelativeTime(value) {
+  if (!value) return '';
+  let date;
+  if (typeof value.toDate === 'function') date = value.toDate();
+  else if (value instanceof Date) date = value;
+  else if (typeof value === 'number') date = new Date(value);
+  else if (typeof value === 'string') {
+    const parsed = new Date(value);
+    date = Number.isNaN(parsed.getTime()) ? null : parsed;
+  }
+  if (!date || Number.isNaN(date.getTime())) return '';
+
+  const diffMs = Date.now() - date.getTime();
+  const minuteMs = 60 * 1000;
+  const hourMs = 60 * minuteMs;
+  const dayMs = 24 * hourMs;
+
+  if (diffMs < minuteMs) return 'Just now';
+  if (diffMs < hourMs) return `${Math.floor(diffMs / minuteMs)}m ago`;
+  if (diffMs < dayMs) return `${Math.floor(diffMs / hourMs)}h ago`;
+  if (diffMs < 2 * dayMs) return 'Yesterday';
+  const sameYear = date.getFullYear() === new Date().getFullYear();
+  return `${date.getDate()} ${MONTH_NAMES[date.getMonth()]}${sameYear ? '' : ` ${date.getFullYear()}`}`;
+}
+
+// Pair of functions to serialize/verify subscription expiry. Kept next to the
+// other shared formatters so subscription helpers import cleanly everywhere.
+export function parseSubscriptionExpiry(profile) {
+  const raw = profile?.subscriptionExpiryDate;
+  if (!raw) return null;
+  if (typeof raw.toDate === 'function') return raw.toDate();
+  if (raw instanceof Date) return raw;
+  const parsed = new Date(raw);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
 const MONTH_NAMES = [
   'Jan',
   'Feb',
@@ -62,37 +80,3 @@ const MONTH_NAMES = [
   'Nov',
   'Dec',
 ];
-
-// Renders an order timestamp. Accepts a Firestore Timestamp, Date, ISO string
-// or number, while passing through existing human-readable display strings
-// (e.g. TEST_MODE mock values like 'Today, 09:42') unchanged.
-export function formatOrderTime(value) {
-  if (!value) return '';
-  if (typeof value.toDate === 'function') {
-    return formatOrderDate(value.toDate());
-  }
-  if (value instanceof Date && !Number.isNaN(value.getTime())) {
-    return formatOrderDate(value);
-  }
-  if (typeof value === 'string' || typeof value === 'number') {
-    const date = new Date(value);
-    if (!Number.isNaN(date.getTime()) && /[^\d]/.test(String(value))) {
-      return formatOrderDate(date);
-    }
-    return String(value);
-  }
-  return String(value);
-}
-
-function formatOrderDate(date) {
-  const today = new Date();
-  const hh = String(date.getHours()).padStart(2, '0');
-  const mm = String(date.getMinutes()).padStart(2, '0');
-  if (date.toDateString() === today.toDateString()) {
-    return `Today, ${hh}:${mm}`;
-  }
-  const day = date.getDate();
-  const month = MONTH_NAMES[date.getMonth()];
-  const sameYear = date.getFullYear() === today.getFullYear();
-  return `${day} ${month}${sameYear ? '' : ` ${date.getFullYear()}`}, ${hh}:${mm}`;
-}

@@ -7,13 +7,19 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from 'firebase/auth';
-import { deleteDoc, doc, getDoc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { auth, db } from '../services/firebase';
 import { setRuntimeRole } from '../services/listenerLogging';
 
-const VALID_ROLES = ['buyer', 'vendor', 'delivery'];
+// Roles understood by the app:
+//   member   - free user who browses, discovers and contacts businesses.
+//   business - business owner who subscribes (KSh 100/month) to advertise.
+const VALID_ROLES = ['member', 'business'];
+
+// Roles that require (and rely on) the KSh 100/month membership subscription.
+const SUBSCRIBED_ROLES = ['business'];
 
 const PROFILE_RETRY_ATTEMPTS = 5;
 const PROFILE_RETRY_DELAY_MS = 400;
@@ -101,7 +107,7 @@ export function AuthProvider({ children }) {
 
   // Keep the Firestore profile live so subscription changes made by the
   // backend (M-Pesa callback / dev test endpoints) propagate to every screen
-  // (e.g. the Product gates) without a login/logout cycle.
+  // (e.g. the advertisement gates) without a login/logout cycle.
   useEffect(() => {
     if (!currentUser?.uid) return undefined;
     const unsub = onSnapshot(
@@ -168,7 +174,7 @@ export function AuthProvider({ children }) {
     const profile = {
       uid,
       email: email.trim(),
-      role: profileData.role || 'buyer',
+      role: profileData.role || 'member',
       fullName: profileData.fullName || '',
       phone: profileData.phone || '',
       profilePhoto: null,
@@ -176,21 +182,11 @@ export function AuthProvider({ children }) {
       updatedAt: now,
     };
 
-    if (profile.role === 'vendor') {
-      profile.storeName = profileData.storeName || '';
+    if (SUBSCRIBED_ROLES.includes(profile.role)) {
+      profile.businessName = profileData.businessName || '';
       profile.subscriptionStatus = 'inactive';
       profile.subscriptionStartDate = null;
       profile.subscriptionExpiryDate = null;
-    }
-
-    if (profile.role === 'delivery') {
-      // The National ID is NOT stored on the public users/{uid} profile (that
-      // document is returned whole by the delivery-directory query, so it must
-      // never contain sensitive fields). It is written to the owner-only
-      // deliveryCredentials/{uid} document instead. All other delivery
-      // profile fields stay on users/{uid} exactly as before.
-      profile.vehicleType = profileData.vehicleType || '';
-      profile.vehiclePlateNumber = profileData.vehiclePlateNumber || '';
     }
 
     try {
@@ -199,26 +195,6 @@ export function AuthProvider({ children }) {
       // Clean up the auth account so the user can retry registration.
       await deleteUser(credential.user).catch(() => {});
       throw error;
-    }
-
-    // Write the confidential National ID after the profile succeeds, and roll
-    // the whole registration back (profile + auth) if this second write fails,
-    // so a delivery partner is never left half-registered.
-    if (profile.role === 'delivery') {
-      const nationalId = (profileData.nationalId || '').trim();
-      if (nationalId) {
-        try {
-          await setDoc(doc(db, 'deliveryCredentials', uid), {
-            uid,
-            nationalId,
-            updatedAt: now,
-          });
-        } catch (error) {
-          await deleteDoc(doc(db, 'users', uid)).catch(() => {});
-          await deleteUser(credential.user).catch(() => {});
-          throw error;
-        }
-      }
     }
 
     return { user: credential.user, role: profile.role };
@@ -270,6 +246,9 @@ export function AuthProvider({ children }) {
     register,
     logout,
     resetPassword,
+    // Convenience flags so screens do not hardcode role string checks.
+    isMember: userRole === 'member',
+    isBusiness: userRole === 'business',
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

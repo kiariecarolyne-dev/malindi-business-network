@@ -1,25 +1,36 @@
+// Malindi Business Network design tokens.
+//
+// Visual identity: a modern, professional digital business network.
+// Deep midnight navy as the brand canvas, electric blue as the action accent,
+// a small teal/cyan highlight for network/technology touches, cool light
+// neutrals for backgrounds. Deliberately distinct from the legacy green
+// palette of the copied project.
 export const colors = {
-  primary: '#16A34A',
-  primaryDark: '#15803D',
-  primaryLight: '#DCFCE7',
-  accent: '#F59E0B',
-  background: '#F4F7F5',
+  navy: '#0A1A3C',
+  navySoft: '#12264F',
+  primary: '#2563EB',
+  primaryDark: '#1E40AF',
+  primaryLight: '#E0EAFF',
+  accent: '#14B8A6',
+  accentLight: '#CCFBF1',
+  background: '#F8FAFC',
   surface: '#FFFFFF',
-  text: '#111827',
-  textSecondary: '#6B7280',
-  textMuted: '#9CA3AF',
-  border: '#E5E7EB',
+  surfaceAlt: '#0B1F45',
+  text: '#0F172A',
+  textSecondary: '#475569',
+  textMuted: '#94A3B8',
+  border: '#E2E8F0',
   danger: '#DC2626',
   dangerLight: '#FEE2E2',
   success: '#16A34A',
   successLight: '#DCFCE7',
   warning: '#D97706',
   warningLight: '#FEF3C7',
-  placeholder: '#9CA3AF',
+  placeholder: '#94A3B8',
   white: '#FFFFFF',
-  // Background canvas of the official app logo (RGB 241,246,239).
-  // Used so the rounded logo wrappers blend seamlessly with the asset.
-  logoBackground: '#F1F6EF',
+  // Background used behind photo/logo placeholders so they blend with the
+  // app canvas (matches the splash and adaptive icon background).
+  logoBackground: '#F8FAFC',
 };
 
 export const spacing = {
@@ -39,7 +50,15 @@ export const radius = {
 };
 
 export const typography = {
-  title: { fontSize: 24, fontWeight: '700', color: colors.text },
+  // Large display headline used on branded entry screens.
+  display: {
+    fontSize: 30,
+    fontWeight: '800',
+    color: colors.navy,
+    lineHeight: 38,
+    letterSpacing: -0.5,
+  },
+  title: { fontSize: 26, fontWeight: '700', color: colors.navy },
   subtitle: { fontSize: 16, fontWeight: '600', color: colors.text },
   body: { fontSize: 14, color: colors.text },
   bodySmall: { fontSize: 12, color: colors.textSecondary },
@@ -58,4 +77,12 @@ export const shadow = {
   shadowOpacity: 0.05,
   shadowRadius: 6,
   elevation: 2,
+};
+
+export const glow = {
+  shadowColor: colors.primary,
+  shadowOffset: { width: 0, height: 4 },
+  shadowOpacity: 0.25,
+  shadowRadius: 16,
+  elevation: 6,
 };
