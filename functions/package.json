@@ -1,8 +1,8 @@
 {
-  "name": "sokohapa-functions",
+  "name": "malindi-business-network-functions",
   "version": "1.0.0",
   "private": true,
-  "description": "SokoHapa Cloud Functions - server-side push notification senders",
+  "description": "Malindi Business Network Cloud Functions - server-side push notification senders",
   "main": "index.js",
   "engines": {
     "node": "20"

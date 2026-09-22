@@ -17,7 +17,7 @@ export const colors = {
   warningLight: '#FEF3C7',
   placeholder: '#9CA3AF',
   white: '#FFFFFF',
-  // Background canvas of the official SokoHapa logo (RGB 241,246,239).
+  // Background canvas of the official app logo (RGB 241,246,239).
   // Used so the rounded logo wrappers blend seamlessly with the asset.
   logoBackground: '#F1F6EF',
 };

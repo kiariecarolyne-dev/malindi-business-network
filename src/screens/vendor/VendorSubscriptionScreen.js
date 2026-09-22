@@ -21,9 +21,9 @@ import { colors, radius, shadow, spacing, typography } from '../../utils/theme';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || 'http://10.0.2.2:3000';
 const SUBSCRIPTION_AMOUNT = 100;
-const TRANSACTION_DESC = 'SokoHapa monthly vendor subscription';
+const TRANSACTION_DESC = 'Malindi Business Network vendor subscription';
 
-const SOKOHAPA_LOGO = require('../../../assets/sokohapa-logo.png');
+const SUBSCRIPTION_LOGO = require('../../../assets/sokohapa-logo.png');
 
 function normalizeKenyanPhone(raw) {
   if (!raw || typeof raw !== 'string') return null;
@@ -194,12 +194,12 @@ export default function VendorSubscriptionScreen({ navigation }) {
         <View style={styles.hero}>
           <View style={styles.logoWrap}>
             <Image
-              source={SOKOHAPA_LOGO}
+              source={SUBSCRIPTION_LOGO}
               style={styles.logo}
               resizeMode="contain"
             />
           </View>
-          <Text style={styles.title}>SokoHapa Vendor Subscription</Text>
+          <Text style={styles.title}>Malindi Business Network Vendor Subscription</Text>
           {isSubscribed ? (
             <>
               <StatusBadge label="Active" />

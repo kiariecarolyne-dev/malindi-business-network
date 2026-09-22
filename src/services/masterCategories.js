@@ -1,4 +1,4 @@
-// SokoHapa Master Catalogue: Categories
+// Malindi Business Network Master Catalogue: Categories
 //
 // Extensible architecture. Categories are defined ONCE here and referenced by
 // master products via `categoryId`. Additional categories can be appended

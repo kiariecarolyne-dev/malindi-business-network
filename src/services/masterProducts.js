@@ -1,4 +1,4 @@
-// SokoHapa Master Catalogue: Products
+// Malindi Business Network Master Catalogue: Products
 //
 // ONE central master catalogue. Vendors reference these products via
 // `masterProductId`; the master list itself is never duplicated per vendor.

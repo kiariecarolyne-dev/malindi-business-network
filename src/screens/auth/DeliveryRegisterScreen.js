@@ -74,9 +74,9 @@ export default function DeliveryRegisterScreen({ navigation }) {
 
           <Text style={styles.title}>Delivery Account</Text>
           <Text style={styles.subtitle}>
-            Create a delivery account to start delivering on SokoHapa. Your
-            National ID is collected for verification and will never be shown
-            publicly.
+            Create a delivery account to start delivering on Malindi Business
+            Network. Your National ID is collected for verification and will
+            never be shown publicly.
           </Text>
 
           <TextField

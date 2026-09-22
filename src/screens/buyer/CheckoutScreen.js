@@ -483,8 +483,8 @@ export default function CheckoutScreen({ navigation }) {
             <Ionicons name="shield-checkmark-outline" size={18} color={colors.success} />
             <Text style={styles.payNoticeText}>
               Pay this order amount directly to the vendor using one of the
-              methods above. SokoHapa does NOT receive your money — this is a
-              direct payment to the vendor.
+              methods above. Malindi Business Network does NOT receive your
+              money — this is a direct payment to the vendor.
             </Text>
           </View>
           <View style={styles.payStepsCard}>
@@ -506,9 +506,9 @@ export default function CheckoutScreen({ navigation }) {
             <Ionicons name="flask-outline" size={18} color={colors.warning} />
             <Text style={styles.testModeText}>
               TEST MODE: placing this order creates an in-memory test order shared
-              with the vendor and delivery screens. SokoHapa takes no payment -
-              pay the vendor directly via M-PESA, and the delivery fee is paid
-              separately in cash.
+              with the vendor and delivery screens. Malindi Business Network
+              takes no payment - pay the vendor directly via M-PESA, and the
+              delivery fee is paid separately in cash.
             </Text>
           </View>
         ) : null}

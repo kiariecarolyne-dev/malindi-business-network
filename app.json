@@ -1,17 +1,17 @@
 {
   "expo": {
-    "name": "SokoHapa",
-    "slug": "SokoHapa",
+    "name": "Malindi Business Network",
+    "slug": "malindi-business-network",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/sokohapa-logo.png",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.sokohapa.app"
+      "bundleIdentifier": "com.malindibusinessnetwork.app"
     },
     "android": {
-      "package": "com.sokohapa.app",
+      "package": "com.malindibusinessnetwork.app",
       "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#F1F6EF",

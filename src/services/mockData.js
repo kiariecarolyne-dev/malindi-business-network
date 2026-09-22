@@ -335,7 +335,7 @@ export const currentVendor = {
   storeDescription: 'Fresh vegetables and fruits from our family farm.',
   location: 'Kiambu Road, Nairobi',
   phone: '+254 712 345 678',
-  email: 'vendor@sokohapa.co.ke',
+  email: 'vendor@malindibusinessnetwork.co.ke',
   subscriptionActive: false,
   subscriptionPlan: 'Ksh 100 / month',
   mpesaPaymentMethods: {
@@ -715,7 +715,7 @@ export function getBuyerOrderById(id) {
 export const currentUserProfile = {
   fullName: 'Jane Wambui',
   phone: '+254 722 123 456',
-  email: 'jane@sokohapa.co.ke',
+  email: 'jane@malindibusinessnetwork.co.ke',
   role: 'buyer',
 };
 
@@ -888,7 +888,7 @@ export const deliveryHistory = [
 export const currentDeliveryProfile = {
   fullName: 'Collins Otieno',
   phone: '+254 700 111 222',
-  email: 'collins@sokohapa.co.ke',
+  email: 'collins@malindibusinessnetwork.co.ke',
   vehicleType: 'motorcycle',
   plateNumber: 'KDK 123A',
   availability: 'Available',

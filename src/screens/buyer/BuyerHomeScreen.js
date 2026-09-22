@@ -12,7 +12,7 @@ import { getActiveCategories } from '../../utils/productCatalogue';
 import { TEST_MODE } from '../../utils/testMode';
 import { colors, radius, shadow, spacing, typography } from '../../utils/theme';
 
-const SOKOHAPA_LOGO = require('../../../assets/sokohapa-logo.png');
+const HOME_LOGO = require('../../../assets/sokohapa-logo.png');
 
 export default function BuyerHomeScreen({ navigation }) {
   const { items } = useCart();
@@ -48,7 +48,7 @@ export default function BuyerHomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <AppHeader
-        logo={SOKOHAPA_LOGO}
+        logo={HOME_LOGO}
         right={
           <View style={styles.headerActions}>
             <TouchableOpacity

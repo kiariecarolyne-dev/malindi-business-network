@@ -3,7 +3,7 @@ import { Image } from 'react-native';
 import ImagePlaceholder from './ImagePlaceholder';
 import { getProfilePhotoUrl } from '../services/profilePhotoService';
 
-// Circular profile photo that follows the existing SokoHapa profile-photo
+// Circular profile photo that follows the existing Malindi Business Network profile-photo
 // system: given the stored profile-photo path (e.g. "{uid}/profile.jpg") it
 // resolves the public URL via getProfilePhotoUrl() and renders <Image />.
 // When no path exists (or the image cannot be loaded) it falls back to the

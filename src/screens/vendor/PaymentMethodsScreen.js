@@ -101,7 +101,8 @@ export default function PaymentMethodsScreen({ navigation }) {
               Send Money (to your phone number) and/or Buy Goods Till number.
               The numbers shown to the buyer are locked onto each order at
               checkout, so they never change for that order even if you update
-              them later. SokoHapa never receives or handles this money.
+              them later. Malindi Business Network never receives or handles
+              this money.
             </Text>
           </View>
 

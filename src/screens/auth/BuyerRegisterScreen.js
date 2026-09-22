@@ -58,7 +58,7 @@ export default function BuyerRegisterScreen({ navigation }) {
 
           <Text style={styles.title}>Buyer Account</Text>
           <Text style={styles.subtitle}>
-            Create a buyer account to start shopping on SokoHapa.
+            Create a buyer account to start shopping on Malindi Business Network.
           </Text>
 
           <TextField

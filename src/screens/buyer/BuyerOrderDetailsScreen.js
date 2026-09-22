@@ -56,8 +56,8 @@ export default function BuyerOrderDetailsScreen({ navigation, route }) {
   }, [orderId]);
 
   // In-app notification for the buyer when the vendor rejects/cancels the
-  // order because the payment could not be confirmed. SokoHapa does not
-  // verify payments itself; the vendor made that decision.
+  // order because the payment could not be confirmed. Malindi Business
+  // Network does not verify payments itself; the vendor made that decision.
   useEffect(() => {
     if (
       order &&
@@ -301,8 +301,9 @@ export default function BuyerOrderDetailsScreen({ navigation, route }) {
               color={colors.success}
             />
             <Text style={styles.payNoticeText}>
-              Pay this order amount directly to the vendor. SokoHapa does NOT
-              receive your money - this is a direct payment to the vendor.
+              Pay this order amount directly to the vendor. Malindi Business
+              Network does NOT receive your money - this is a direct payment to
+              the vendor.
             </Text>
           </View>
         </View>

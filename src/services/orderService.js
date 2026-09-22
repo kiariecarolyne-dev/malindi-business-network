@@ -609,9 +609,10 @@ export async function editOrder(orderId, updates) {
 // Buyer reports a direct M-PESA payment made to the vendor by pasting the
 // M-PESA confirmation message received on their phone. The report is only
 // accepted while the order is still 'New'; the Firestore rules enforce this
-// and the field allowlist server-side. SokoHapa never receives or verifies
-// the money - the vendor compares the pasted message with their real M-PESA
-// transaction and decides whether to verify or reject it.
+// and the field allowlist server-side. Malindi Business Network never
+// receives or verifies the money - the vendor compares the pasted message
+// with their real M-PESA transaction and decides whether to verify or reject
+// it.
 export async function reportPayment(orderId, { mpesaConfirmationMessage }) {
   if (!orderId) {
     throw new Error('reportPayment: orderId is required');

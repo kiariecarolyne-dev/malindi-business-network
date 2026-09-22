@@ -16,7 +16,7 @@
 //   - It NEVER hardcodes every vendor as subscribed.
 //   - It NEVER bypasses M-PESA / international payment processing. Vendor
 //     subscription payments always run through the real Daraja STK Push flow
-//     via the SokoHapa backend (/api/payments/mpesa/stkpush), and subscription
+//     via the Malindi Business Network backend (/api/payments/mpesa/stkpush), and subscription
 //     activation is performed ONLY by the backend after a verified callback.
 //   - The underlying real subscription checks stay intact and are the ONLY
 //     ones used when TEST_MODE is disabled.

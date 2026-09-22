@@ -1,4 +1,4 @@
-// SokoHapa vendor product records
+// Malindi Business Network vendor product records
 //
 // Data model for the VENDOR'S OWN store products, separate from the master
 // catalogue.

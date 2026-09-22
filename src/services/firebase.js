@@ -3,7 +3,7 @@ import { getAuth, getReactNativePersistence, initializeAuth } from 'firebase/aut
 import { getFirestore } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Public client-side configuration for the "SokoHapa Mobile" web app.
+// Public client-side configuration for the "Malindi Business Network" app.
 // These are safe client identifiers (not server/admin credentials) and are
 // inlined by Expo from .env.local at bundle time.
 const firebaseConfig = {

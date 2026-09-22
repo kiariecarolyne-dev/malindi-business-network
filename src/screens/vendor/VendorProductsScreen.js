@@ -178,8 +178,9 @@ export default function VendorProductsScreen({ navigation }) {
 
             <Text style={styles.headerText}>Master Catalogue</Text>
             <Text style={styles.hintText}>
-              Browse the full SokoHapa master product catalogue. Add products to
-              your store with an active subscription.
+              Browse the full Malindi Business Network master product
+              catalogue. Add products to your store with an active
+              subscription.
             </Text>
 
             <View style={styles.searchWrap}>

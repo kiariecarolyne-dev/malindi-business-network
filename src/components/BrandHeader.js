@@ -16,10 +16,10 @@ export default function BrandHeader({ size = 'large', tagline = true }) {
           resizeMode="contain"
         />
       </View>
-      <Text style={[styles.title, isLarge && styles.titleLarge]}>SokoHapa</Text>
+      <Text style={[styles.title, isLarge && styles.titleLarge]}>Malindi Business Network</Text>
       {tagline ? (
         <Text style={[styles.tagline, isLarge && styles.taglineLarge]}>
-          The Market Is Here
+          Connecting Malindi Businesses
         </Text>
       ) : null}
     </View>
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: colors.text,
     letterSpacing: 0.5,
+    textAlign: 'center',
   },
   titleLarge: {
     fontSize: 36,

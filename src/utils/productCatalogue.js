@@ -1,4 +1,4 @@
-// SokoHapa Master Catalogue: helpers
+// Malindi Business Network Master Catalogue: helpers
 //
 // Reads for the master catalogue, allowed selling units, and the standard
 // image resolution strategy.

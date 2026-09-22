@@ -60,7 +60,7 @@ export default function LoginScreen({ navigation }) {
           <BrandHeader size="medium" />
 
           <Text style={styles.welcome}>Welcome back</Text>
-          <Text style={styles.hint}>Log in to continue shopping on SokoHapa.</Text>
+          <Text style={styles.hint}>Log in to continue shopping on Malindi Business Network.</Text>
 
           <View style={styles.form}>
             <TextField

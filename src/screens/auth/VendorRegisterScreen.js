@@ -60,8 +60,8 @@ export default function VendorRegisterScreen({ navigation }) {
 
           <Text style={styles.title}>Vendor Account</Text>
           <Text style={styles.subtitle}>
-            Create a vendor account to start selling on SokoHapa. After
-            registering you will reach the subscription screen.
+            Create a vendor account to start selling on Malindi Business
+            Network. After registering you will reach the subscription screen.
           </Text>
 
           <TextField

@@ -34,7 +34,7 @@ export default function RegisterRoleScreen({ navigation }) {
       <View style={styles.header}>
         <BrandHeader size="medium" tagline={false} />
         <Text style={styles.title}>Create Account</Text>
-        <Text style={styles.subtitle}>How would you like to use SokoHapa?</Text>
+        <Text style={styles.subtitle}>How would you like to use Malindi Business Network?</Text>
       </View>
 
       <View style={styles.list}>

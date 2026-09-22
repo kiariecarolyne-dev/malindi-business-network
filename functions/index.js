@@ -1,6 +1,6 @@
 'use strict';
 
-// SokoHapa - server-side push notification senders.
+// Malindi Business Network - server-side push notification senders.
 //
 // The app writes EXPO push tokens to pushTokens/{uid}/tokens/{deviceId}
 // (see src/services/pushNotifications.js). These Cloud Functions watch the

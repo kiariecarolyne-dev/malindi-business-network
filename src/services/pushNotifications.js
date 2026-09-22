@@ -39,7 +39,7 @@ if (IS_EXPO_GO) {
   });
 }
 
-const DEVICE_ID_STORAGE_KEY = 'sokohapa:notificationDeviceId';
+const DEVICE_ID_STORAGE_KEY = 'malindiBusinessNetwork:notificationDeviceId';
 
 let configurePromise = null;
 
@@ -71,7 +71,7 @@ function ensureConfigured() {
 export async function getOrCreateDeviceId() {
   let deviceId = await AsyncStorage.getItem(DEVICE_ID_STORAGE_KEY);
   if (!deviceId) {
-    deviceId = `sh-dev-${Date.now().toString(36)}-${Math.random()
+    deviceId = `mbn-dev-${Date.now().toString(36)}-${Math.random()
       .toString(36)
       .slice(2, 10)}`;
     await AsyncStorage.setItem(DEVICE_ID_STORAGE_KEY, deviceId);

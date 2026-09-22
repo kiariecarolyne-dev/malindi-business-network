@@ -1,6 +1,6 @@
-# SokoHapa Master Product Images
+# Malindi Business Network Master Product Images
 
-This folder is the **single source of standard product images** for the SokoHapa master catalogue.
+This folder is the **single source of standard product images** for the Malindi Business Network master catalogue.
 
 ## Architecture
 
